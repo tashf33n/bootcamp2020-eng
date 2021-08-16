@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: Deploy Website
+name: React App Deploy Surge
 
 # Controls when the workflow will run
 on:
@@ -8,9 +8,6 @@ on:
   push:
     branches: [ main ]
   
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
@@ -28,9 +25,18 @@ jobs:
         uses: actions/setup-node@v2-beta
         with: 
           node-version: 12
+          
+      - uses: borales/actions-yarn@v2.0.0
+        with:
+            cmd: install # will run yarn install command
+      
+      - name: Build React App
+        run: yarn build
+      
       - name: Install Surge
         run: npm install -g surge
+        
       - name: Run Surge
-        run: surge ./ bootcamp2020_project1taz.surge.sh --token ${{secrets.SURGE_TOKEN}}
+        run: surge ./build project2taz.surge.sh --token ${{secrets.SURGE_TOKEN}}
       
   
